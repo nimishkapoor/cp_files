@@ -196,113 +196,26 @@ bool fermat_prime(ull x)
 	return 1;
 }
 //======================================================================
-vi g[5000];
-int wt[5001][5001];
-int lvl[5001];
-ll dist[5001];
-int par[5001][100];
+int a[25];
 int n;
-void dfs(int x)
+int fun(int prev_sum, int pos)
 {
-	for(unsigned int i=0;i<g[x].size();i++)
+	if(pos==n)
 	{
-		if(lvl[g[x][i]]==-1)
+		return 1;
+	}
+	int sum=0;
+	int nofw=0;
+	for(int i=pos;i<n;i++)
+	{
+		sum+=a[i];
+		if(sum>=prev_sum)
 		{
-			lvl[g[x][i]]=lvl[x]+1;
-			dist[g[x][i]]=dist[x]+wt[x][g[x][i]];
-			par[g[x][i]][0]=x;
-			dfs(g[x][i]);
+			nofw+=fun(sum,i+1);
 		}
 	}
+	return nofw;
 }
-int lca(int u, int v)
-{
-	if(lvl[u]<lvl[v])
-	{
-		swap(u,v);
-	}
-	
-	int dif=lvl[u]-lvl[v];
-	int lg;
-	
-	while(dif!=0)
-	{
-		lg=log2(dif);
-		u=par[u][lg];
-		dif-=pow(2,lg);
-	}
-	
-	while(u!=v)
-	{
-		int i;
-		for(i=log(lvl[u]);i>0 && par[u][i]==par[v][i];i--);
-		u=par[u][i];
-		v=par[v][i];
-	}
-	return u;
-}
-void pre()
-{
-	for(int i=1;i<=log2(n);i++)
-	{
-		for(int j=1;j<=n;j++)
-		{
-			par[j][i]=par[par[j][i-1]][i-1];
-		}
-	}
-}
-ll getdist(int u,int v)
-{
-	if(lvl[u]<lvl[v])
-	{
-		swap(u,v);
-	}
-	ll w=lca(u,v);
-	return dist[u]+dist[v]-2*dist[w];
-}
-
-int kth(int u,int v,int k)
-{
-	int w=lca(u,v);
-	int lg;
-	if(k==0)
-	{
-		return u;
-	}
-	if(lvl[u]-lvl[w]==k-1)
-	{
-		//watch(w);
-		return w;
-	}
-	else if(lvl[u]-lvl[w]<k-1)
-	{
-		k=k-(lvl[u]-lvl[w])-1;
-		k=lvl[w]+k;//watch(k);
-		int dif=lvl[v]-k;//watch(dif);watch(lvl[v]);
-		while(dif!=0)
-		{
-			lg=log2(dif);
-			v=par[v][lg];
-			dif-=pow(2,lg);
-		}
-		//watch(v);
-		return v;
-	}
-	else
-	{
-		k=lvl[u]-(k-1);//watch(k);
-		int dif=lvl[u]-k;//watch(dif);watch(lvl[u]);
-		while(dif!=0)
-		{
-			lg=log2(dif);
-			u=par[u][lg];
-			dif-=pow(2,lg);
-		}
-		//watch(u);
-		return u;
-	}
-}
-
 int main()
 {
 	ios_base::sync_with_stdio(0); 
@@ -311,51 +224,19 @@ int main()
     //freopen("input.txt", "r", stdin);
 	//freopen("output.txt", "w", stdout);
 	
-	int t;
-	cin>>t;
-	
-	while(t--)
+	string s;
+	cin>>s;
+	int t=1;
+	while(s!="bye")
 	{
-		for(int i=0;i<5001;i++)
+		n=s.size();
+		for(int i=0;i<s.size();i++)
 		{
-			g[i].clear();
-			lvl[i]=-1;
+			a[i]=s[i]-'0';
 		}
-		clr(dist);
-		clr(par);
-		clr(wt);
-		cin>>n;
-		int u,v,w;
-		//g[0].pb(1);
-		for(int i=0;i<n-1;i++)
-		{
-			cin>>u>>v>>w;
-			g[u].pb(v);
-			wt[u][v]=w;
-		}
-		
-		lvl[1]=0;
-		par[1][0]=0;
-		dfs(1);
-		pre();
-		
-		string s;
-		cin>>s;
-		while(s!="DONE")
-		{
-			if(s=="DIST")
-			{
-				cin>>u>>v;
-				cout<<getdist(u,v)<<endl;
-			}
-			else
-			{
-				int k;
-				cin>>u>>v>>k;
-				cout<<kth(u,v,k)<<endl;
-			}
-			cin>>s;
-		}
+		cout<<t<<". "<<fun(0,0)<<endl;
+		t++;
+		cin>>s;	
 	}
     
 	return 0;

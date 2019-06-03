@@ -196,113 +196,64 @@ bool fermat_prime(ull x)
 	return 1;
 }
 //======================================================================
-vi g[5000];
-int wt[5001][5001];
-int lvl[5001];
-ll dist[5001];
-int par[5001][100];
 int n;
-void dfs(int x)
+map<string,int> srtd;
+int a[30001];
+int merge(int s,int m,int e)
 {
-	for(unsigned int i=0;i<g[x].size();i++)
+	int n1=m-s+1;
+	int n2=e-m;
+	int tmp1[n1];
+	int tmp2[n2];
+	for(int i=0;i<n1;i++)
 	{
-		if(lvl[g[x][i]]==-1)
+		tmp1[i]=a[i+s];
+	}
+	for(int i=0;i<n2;i++)
+	{
+		tmp2[i]=a[m+i+1];
+	}
+	int i=0,j=0,k=s;
+	int invcnt=0;
+	while(i<n1 && j<n2)
+	{
+		if(tmp1[i]<=tmp2[j])
 		{
-			lvl[g[x][i]]=lvl[x]+1;
-			dist[g[x][i]]=dist[x]+wt[x][g[x][i]];
-			par[g[x][i]][0]=x;
-			dfs(g[x][i]);
+			a[k]=tmp1[i];
+			i++;
 		}
-	}
-}
-int lca(int u, int v)
-{
-	if(lvl[u]<lvl[v])
-	{
-		swap(u,v);
-	}
-	
-	int dif=lvl[u]-lvl[v];
-	int lg;
-	
-	while(dif!=0)
-	{
-		lg=log2(dif);
-		u=par[u][lg];
-		dif-=pow(2,lg);
-	}
-	
-	while(u!=v)
-	{
-		int i;
-		for(i=log(lvl[u]);i>0 && par[u][i]==par[v][i];i--);
-		u=par[u][i];
-		v=par[v][i];
-	}
-	return u;
-}
-void pre()
-{
-	for(int i=1;i<=log2(n);i++)
-	{
-		for(int j=1;j<=n;j++)
+		else
 		{
-			par[j][i]=par[par[j][i-1]][i-1];
+			a[k]=tmp2[j];
+			j++;
+			invcnt+=(m-(i+s)+1);
 		}
+		k++;
 	}
+	while(i<n1)
+	{
+		a[k]=tmp1[i];
+		i++;k++;
+	}
+	while(j<n2)
+	{
+		a[k]=tmp2[j];
+		j++;k++;
+	}
+	return invcnt;
 }
-ll getdist(int u,int v)
+int mergesort(int s,int e)
 {
-	if(lvl[u]<lvl[v])
+	if(s<e)
 	{
-		swap(u,v);
+		int m=(s+e)/2;
+		int left=mergesort(s,m);
+		int right=mergesort(m+1,e);
+		int join=merge(s,m,e);
+		return left+right+join;
 	}
-	ll w=lca(u,v);
-	return dist[u]+dist[v]-2*dist[w];
+	return 0;
 }
-
-int kth(int u,int v,int k)
-{
-	int w=lca(u,v);
-	int lg;
-	if(k==0)
-	{
-		return u;
-	}
-	if(lvl[u]-lvl[w]==k-1)
-	{
-		//watch(w);
-		return w;
-	}
-	else if(lvl[u]-lvl[w]<k-1)
-	{
-		k=k-(lvl[u]-lvl[w])-1;
-		k=lvl[w]+k;//watch(k);
-		int dif=lvl[v]-k;//watch(dif);watch(lvl[v]);
-		while(dif!=0)
-		{
-			lg=log2(dif);
-			v=par[v][lg];
-			dif-=pow(2,lg);
-		}
-		//watch(v);
-		return v;
-	}
-	else
-	{
-		k=lvl[u]-(k-1);//watch(k);
-		int dif=lvl[u]-k;//watch(dif);watch(lvl[u]);
-		while(dif!=0)
-		{
-			lg=log2(dif);
-			u=par[u][lg];
-			dif-=pow(2,lg);
-		}
-		//watch(u);
-		return u;
-	}
-}
-
 int main()
 {
 	ios_base::sync_with_stdio(0); 
@@ -313,49 +264,22 @@ int main()
 	
 	int t;
 	cin>>t;
-	
 	while(t--)
 	{
-		for(int i=0;i<5001;i++)
-		{
-			g[i].clear();
-			lvl[i]=-1;
-		}
-		clr(dist);
-		clr(par);
-		clr(wt);
 		cin>>n;
-		int u,v,w;
-		//g[0].pb(1);
-		for(int i=0;i<n-1;i++)
-		{
-			cin>>u>>v>>w;
-			g[u].pb(v);
-			wt[u][v]=w;
-		}
-		
-		lvl[1]=0;
-		par[1][0]=0;
-		dfs(1);
-		pre();
-		
 		string s;
-		cin>>s;
-		while(s!="DONE")
+		srtd.clear();
+		for(int i=0;i<n;i++)
 		{
-			if(s=="DIST")
-			{
-				cin>>u>>v;
-				cout<<getdist(u,v)<<endl;
-			}
-			else
-			{
-				int k;
-				cin>>u>>v>>k;
-				cout<<kth(u,v,k)<<endl;
-			}
 			cin>>s;
+			srtd[s]=i;
 		}
+		for(int i=0;i<n;i++)
+		{
+			cin>>s;
+			a[i]=srtd[s];
+		}
+		cout<<mergesort(0,n-1)<<endl;
 	}
     
 	return 0;
