@@ -1,162 +1,135 @@
-#include<bits/stdc++.h>
+#include <stdio.h>
+#include <algorithm>
+#include <iostream>
+#include <iterator>
+#include <numeric>
+#include <sstream>
+#include <fstream>
+#include <cassert>
+#include <climits>
+#include <cstdlib>
+#include <cstring>
+#include <string>
+#include <cstdio>
+#include <vector>
+#include <cmath>
+#include <queue>
+#include <deque>
+#include <stack>
+#include <list>
+#include <map>
+#include <set>
+
 using namespace std;
-typedef long long int ll;
-
-#define watch(x) cout << (#x) << " is " << (x) << endl
-#define mod(x, m) ((((x) % (m)) + (m)) % (m))
-#define max3(a, b, c) max(a, max(b, c))
-#define min3(a, b, c) min(a, min(b, c))
-
-#define gcd __gcd
-#define nof1 __builtin_popcountll
-
 typedef long long ll;
-typedef unsigned long long ull;
-
-typedef pair<int, int> ii;
-typedef pair<int, ii> iii;
-typedef vector<int> vi;
+typedef pair<int,int> ii;
 typedef vector<ii> vii;
-typedef vector<iii> viii;
-typedef vector<long long int> vl;
-    
-const double pi = 2 * acos(0.0);
-const int inf = 0x3f3f3f3f;
-const double infd = 1.0/0.0;
+typedef vector<int> vi;
+#define INF 1000000000
 
-#define pb push_back
-#define mp make_pair
-#define fr first
-#define sc second
-#define clr(a) memset(a, 0, sizeof(a))
-#define all(v) v.begin(), v.end()
-#define alla(a,n) a, a+n
-#define endl "\n"
+int n,m,s,d;
 
-long long power(long long x, long long y,long long MOD)
-{
-	long long res = 1; 
-	x = x % MOD; 
+vector<vii> neighbors;
+vi parents;
+vi vals;
+vii edgesToAvoid;
 
-	while (y > 0)
-	{
-		if (y & 1)
-		res = (res*x) % MOD;
-		y = y>>1;
-		x = (x*x) % MOD;
-	}
-	return res;
-}
-long long mul(long long a,long long b,long long MOD)
-{
-	if(b==1)
-	{
-		return a;
-	}	
-	if(b%2==0)
-	{
-		return 2*(mul(a,b/2,MOD)%MOD);
-	}
-	else
-	{
-		return (a+(2*(mul(a,b/2,MOD))%MOD))%MOD;
+void storeEdges(int node,int parent){
+	//cout<<node<<" "<<parent<<endl;
+	while(parent!=-1){
+		edgesToAvoid.push_back(ii(parent,node));
+		node=parent;
+		parent=parents[parent];
 	}
 }
 
-/*ll ncr[6001][6001];
-void nCr(long long MOD)
-{
-	for(ll i=0;i<=6000;i++)
-	{
-		for(ll k=0;k<=6000;k++)
-		{
-			if(k<=i)
-			{
-				if((k==0)||(k==i))
-				ncr[i][k]=1;
-				else
-				ncr[i][k]=(ncr[i-1][k-1]+ncr[i-1][k])%MOD;
+
+void dijkstras(){
+	//cout<<"1"<<endl;
+	priority_queue<ii,vii,greater<ii> > pq;
+	vals[s]=0;
+	pq.push(ii(s,0));
+	while(!pq.empty()){
+		ii top = pq.top();
+		pq.pop();
+		for(int j=0;j<neighbors[top.first].size();++j){
+			ii x = neighbors[top.first][j];
+			//cout<<top.first<<" "<<x.first<<endl;
+			if(x.first==d){
+				if(vals[x.first]==vals[top.first]+x.second){
+					storeEdges(d,top.first);
+					continue;
+				}
+			}
+			if(vals[x.first]>vals[top.first]+x.second){
+				vals[x.first]=vals[top.first]+x.second;
+				parents[x.first]=top.first;
+				pq.push(ii(x.first,vals[x.first]));
+				if(x.first==d){
+					edgesToAvoid.clear();
+					storeEdges(d,top.first);
+				}
 			}
 		}
-	} 
+	}
 }
 
-ll inv[100005];
-void mulmodinv(long long MOD)
-{
-	inv[1]=1;
-	inv[0]=1;
-	for(int i = 2; i <= 100005; i++)
-	inv[i] = inv[MOD % i]*(MOD-MOD / i) % MOD;
-}*/
 
-bool ispow2(ll n)
-{
-	if(((n & (n-1)) == 0) && n!=0)
-	{
-		return true;
-	}
-	return false;
-}
-bool prime(int x)
-{
-	if(x==1)
-	{
-		return false;
-	}
-	if(x==2)
-	{
-		return true;
-	}
-	if(x%2==0)
-	{
-		return false;
-	}
-	for(int i=3;i*i<=x;i+=2)
-	{
-		if(x%i==0)
-		{
-			return false;
+void dijkstras2(){
+	//cout<<"2"<<endl;
+	priority_queue<ii,vii,greater<ii> > pq;
+	vals[s]=0;
+	pq.push(ii(s,0));
+	while(!pq.empty()){
+		ii top = pq.top();
+		pq.pop();
+		for(int j=0;j<neighbors[top.first].size();++j){
+			ii x = neighbors[top.first][j];
+			if(find(edgesToAvoid.begin(),edgesToAvoid.end(),ii(top.first,x.first))==edgesToAvoid.end()){
+				if(vals[x.first]>vals[top.first]+x.second){
+					vals[x.first]=vals[top.first]+x.second;
+					pq.push(ii(x.first,vals[x.first]));
+				}
+			}
 		}
 	}
- return true;
 }
-int gcd(int a, int b) 
-{ 
-    if (b == 0) 
-        return a; 
-    return gcd(b, a % b);  
-} 
-int coprime(int a, int b) 
-{ 
-	if(a==b)
-		return 0;
-    if(prime(a) && prime(b)) 
-        return 1; 
-    if((a==2 && b%2!=0) ||(b==2 && a%2!=0))
-		return 1;
-	if((a%2!=0 && prime(b) && a<b ) || (b%2!=0 && prime(a) && a>b))
-		return 1;
-	if(abs(a-b)==1)
-		return 1;
-	if(a==1 || b==1)
-		return 1;
-	return gcd(a,b);
+
+void print(){
+	for(int j=0;j<edgesToAvoid.size();++j){
+		//cout<<edgesToAvoid[j].first<<" "<<edgesToAvoid[j].second<<endl;
+	}
 }
-//======================================================================
-int main()
-{
-	ios_base::sync_with_stdio(0); 
-    cin.tie(0);
-    
-    int t;
-    cin>>t;
-    while(t--)
-    {
-		int n;
-		cin>>n;
-		cout<<pow(2,n)<<endl;
-    }
-    
+
+int main(){
+	while(true){
+		scanf("%d %d",&n,&m);
+		if(m==0&&n==0)break;
+		vals = vi (n,INF);
+		parents = vi (n,-1);
+		neighbors = vector<vii> (n,vii());
+		scanf("%d %d",&s,&d);
+		while(m--){
+			int u,v,p;
+			scanf("%d %d %d",&u,&v,&p);
+			neighbors[u].push_back(ii(v,p));
+		}
+		dijkstras();
+		if(vals[d]==INF){
+			printf("-1\n");
+			continue;
+		}
+		vals = vi (n,INF);
+		parents = vi (n,-1);
+		//cout<<endl<<endl;
+		//print();
+		dijkstras2();
+		if(vals[d]==INF){
+			printf("-1\n");
+		}
+		else{
+			cout<<vals[d]<<"\n";
+		}
+	}
 	return 0;
 }
