@@ -1,135 +1,67 @@
-#include <stdio.h>
-#include <algorithm>
-#include <iostream>
-#include <iterator>
-#include <numeric>
-#include <sstream>
-#include <fstream>
-#include <cassert>
-#include <climits>
-#include <cstdlib>
-#include <cstring>
-#include <string>
-#include <cstdio>
-#include <vector>
-#include <cmath>
-#include <queue>
-#include <deque>
-#include <stack>
-#include <list>
-#include <map>
-#include <set>
-
+#include<bits/stdc++.h>
+#define watch(x) cout << (#x) << " is " << (x) << endl
 using namespace std;
-typedef long long ll;
-typedef pair<int,int> ii;
-typedef vector<ii> vii;
-typedef vector<int> vi;
-#define INF 1000000000
-
-int n,m,s,d;
-
-vector<vii> neighbors;
-vi parents;
-vi vals;
-vii edgesToAvoid;
-
-void storeEdges(int node,int parent){
-	//cout<<node<<" "<<parent<<endl;
-	while(parent!=-1){
-		edgesToAvoid.push_back(ii(parent,node));
-		node=parent;
-		parent=parents[parent];
-	}
-}
-
-
-void dijkstras(){
-	//cout<<"1"<<endl;
-	priority_queue<ii,vii,greater<ii> > pq;
-	vals[s]=0;
-	pq.push(ii(s,0));
-	while(!pq.empty()){
-		ii top = pq.top();
-		pq.pop();
-		for(int j=0;j<neighbors[top.first].size();++j){
-			ii x = neighbors[top.first][j];
-			//cout<<top.first<<" "<<x.first<<endl;
-			if(x.first==d){
-				if(vals[x.first]==vals[top.first]+x.second){
-					storeEdges(d,top.first);
-					continue;
-				}
+const int N=2003;
+char a[N][N];
+int p[N][N];
+int main()
+{
+	int n,k,i,j,b,e;
+	scanf("%d%d",&n,&k);
+	for(i=0;i<n;i++)
+		scanf("%s",a[i]);
+    int sum=0;
+	for(i=0;i<n;i++){ //每行
+		b=e=-1; //最左最右端点
+		for(j=0;j<n;j++)
+			if(a[i][j]=='B'){
+				if(b<0) b=j; e=j;
 			}
-			if(vals[x.first]>vals[top.first]+x.second){
-				vals[x.first]=vals[top.first]+x.second;
-				parents[x.first]=top.first;
-				pq.push(ii(x.first,vals[x.first]));
-				if(x.first==d){
-					edgesToAvoid.clear();
-					storeEdges(d,top.first);
-				}
+		if(b<0) sum++;
+		else if(e-b+1<=k){
+            for(int ii=max(0,i-k+1);ii<=i;ii++){watch(ii);
+                for(int jj=max(0,e-k+1);jj<=b;jj++){
+                    p[ii][jj]++;watch(jj);}}
+		}
+		for(int l=0;l<n;l++)
+		{
+			for(int m=0;m<n;m++)
+			{
+				cout<<p[l][m]<<" ";
 			}
+			cout<<endl;
 		}
+		cout<<"*********"<<endl;
+		
 	}
-}
-
-
-void dijkstras2(){
-	//cout<<"2"<<endl;
-	priority_queue<ii,vii,greater<ii> > pq;
-	vals[s]=0;
-	pq.push(ii(s,0));
-	while(!pq.empty()){
-		ii top = pq.top();
-		pq.pop();
-		for(int j=0;j<neighbors[top.first].size();++j){
-			ii x = neighbors[top.first][j];
-			if(find(edgesToAvoid.begin(),edgesToAvoid.end(),ii(top.first,x.first))==edgesToAvoid.end()){
-				if(vals[x.first]>vals[top.first]+x.second){
-					vals[x.first]=vals[top.first]+x.second;
-					pq.push(ii(x.first,vals[x.first]));
-				}
+	
+	cout<<"____________"<<endl;
+	for(i=0;i<n;i++){ //每列
+		b=e=-1;
+		for(j=0;j<n;j++)
+			if(a[j][i]=='B'){
+				if(b<0) b=j; e=j;
 			}
+        if(b<0) sum++;
+		else if(e-b+1<=k){
+            for(int ii=max(0,i-k+1);ii<=i;ii++)
+                for(int jj=max(0,e-k+1);jj<=b;jj++)
+                    p[jj][ii]++;
 		}
+		for(int l=0;l<n;l++)
+		{
+			for(int m=0;m<n;m++)
+			{
+				cout<<p[l][m]<<" ";
+			}
+			cout<<endl;
+		}
+		cout<<"*********"<<endl;
 	}
-}
-
-void print(){
-	for(int j=0;j<edgesToAvoid.size();++j){
-		//cout<<edgesToAvoid[j].first<<" "<<edgesToAvoid[j].second<<endl;
-	}
-}
-
-int main(){
-	while(true){
-		scanf("%d %d",&n,&m);
-		if(m==0&&n==0)break;
-		vals = vi (n,INF);
-		parents = vi (n,-1);
-		neighbors = vector<vii> (n,vii());
-		scanf("%d %d",&s,&d);
-		while(m--){
-			int u,v,p;
-			scanf("%d %d %d",&u,&v,&p);
-			neighbors[u].push_back(ii(v,p));
-		}
-		dijkstras();
-		if(vals[d]==INF){
-			printf("-1\n");
-			continue;
-		}
-		vals = vi (n,INF);
-		parents = vi (n,-1);
-		//cout<<endl<<endl;
-		//print();
-		dijkstras2();
-		if(vals[d]==INF){
-			printf("-1\n");
-		}
-		else{
-			cout<<vals[d]<<"\n";
-		}
-	}
+	int ans=0;
+	for(i=0;i<n;i++)
+		for(j=0;j<n;j++)
+			ans=max(ans,p[i][j]);
+	printf("%d\n",sum+ans);
 	return 0;
 }
