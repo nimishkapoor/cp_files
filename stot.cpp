@@ -122,12 +122,11 @@ bool prime(int x)
 	}
  return true;
 }
-long double gcd(long double a, long double b) 
+int gcd(int a, int b) 
 { 
     if (b == 0) 
-        return a;
-    long long int x=a,y=b; 
-    return gcd(y, x % y);  
+        return a; 
+    return gcd(b, a % b);  
 } 
 int coprime(int a, int b) 
 { 
@@ -197,7 +196,6 @@ bool fermat_prime(ull x)
 	return 1;
 }
 //======================================================================
-vector<long double> a;
 int main()
 {
 	ios_base::sync_with_stdio(0); 
@@ -205,76 +203,6 @@ int main()
     
     //freopen("input.txt", "r", stdin);
 	//freopen("output.txt", "w", stdout);
-	
-	long double n,m,q;
-	cin>>n>>m>>q;
-	long double g=gcd(n,m);
-	//watch(g);
-	
-	if(n==m)
-	{
-		long double x1,y1,x2,y2,s1,s2;
-		while(q--)
-		{
-			cin>>x1>>y1>>x2>>y2;
-			if(y1==y2)
-			{
-				cout<<"YES"<<endl;
-			}	
-			else
-			{
-				cout<<"NO"<<endl;
-			}
-		}
-		return 0;
-	}
-	
-	for(long double i=1;i<=g;i++)
-	{
-		//watch((double)i/g);
-		a.pb((long double)i/g);
-	}
-	
-	/*for(int i=0;i<g;i++)
-	{
-		cout<<a[i]<<" ";
-	}cout<<endl;*/
-	
-	long double x1,y1,x2,y2,s1,s2;
-	while(q--)
-	{
-		long double tmp,lb,ub;
-		cin>>x1>>y1>>x2>>y2;
-		if(x1==1)
-		{
-			auto it=lower_bound(all(a),(long double)y1/n);//watch((double)y1/n);
-			ub=*it;//watch(ub);
-			lb=ub-((long double)1/g);//watch(lb);
-		}
-		else
-		{
-			auto it=lower_bound(all(a),(long double)y1/m);//watch((double)y1/m);
-			ub=*it;//watch(ub);
-			lb=ub-(1/g);//watch(lb);
-		}
-		if(x2==1)
-		{
-			tmp=(long double)y2/n;
-		}
-		else
-		{
-			tmp=(long double)y2/m;
-		}//watch(tmp);
-		
-		if(lb<tmp && tmp<=ub)
-		{
-			cout<<"YES"<<endl;
-		}
-		else
-		{
-			cout<<"NO"<<endl;
-		}
-	}
     
 	return 0;
 }

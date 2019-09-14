@@ -122,12 +122,11 @@ bool prime(int x)
 	}
  return true;
 }
-long double gcd(long double a, long double b) 
+int gcd(int a, int b) 
 { 
     if (b == 0) 
-        return a;
-    long long int x=a,y=b; 
-    return gcd(y, x % y);  
+        return a; 
+    return gcd(b, a % b);  
 } 
 int coprime(int a, int b) 
 { 
@@ -197,7 +196,36 @@ bool fermat_prime(ull x)
 	return 1;
 }
 //======================================================================
-vector<long double> a;
+int n;
+ll a[100005];
+ll b[100005];
+ll dp[100005][2];
+ll sol(int x,int prev)
+{
+	if(x==n)
+	{
+		return 0;
+	}
+	if(prev!=-1)
+	{
+		if(dp[x][prev]!=-1)
+		{
+			return dp[x][prev];
+		}
+	}
+	if(prev==0)
+	{
+		return dp[x][prev]=max(a[x]+sol(x+1,1),sol(x+1,0));
+	}
+	else if(prev==1)
+	{
+		return dp[x][prev]=max(sol(x+1,1),b[x]+sol(x+1,0));
+	}
+	else
+	{
+		return max(a[x]+sol(x+1,1),b[x]+sol(x+1,0));
+	}
+}
 int main()
 {
 	ios_base::sync_with_stdio(0); 
@@ -206,75 +234,25 @@ int main()
     //freopen("input.txt", "r", stdin);
 	//freopen("output.txt", "w", stdout);
 	
-	long double n,m,q;
-	cin>>n>>m>>q;
-	long double g=gcd(n,m);
-	//watch(g);
-	
-	if(n==m)
+	for(int i=0;i<100005;i++)
 	{
-		long double x1,y1,x2,y2,s1,s2;
-		while(q--)
-		{
-			cin>>x1>>y1>>x2>>y2;
-			if(y1==y2)
-			{
-				cout<<"YES"<<endl;
-			}	
-			else
-			{
-				cout<<"NO"<<endl;
-			}
-		}
-		return 0;
+		dp[i][0]=-1;
+		dp[i][1]=-1;
 	}
 	
-	for(long double i=1;i<=g;i++)
+	cin>>n;
+	
+	for(int i=0;i<n;i++)
 	{
-		//watch((double)i/g);
-		a.pb((long double)i/g);
+		cin>>a[i];
 	}
 	
-	/*for(int i=0;i<g;i++)
+	for(int i=0;i<n;i++)
 	{
-		cout<<a[i]<<" ";
-	}cout<<endl;*/
-	
-	long double x1,y1,x2,y2,s1,s2;
-	while(q--)
-	{
-		long double tmp,lb,ub;
-		cin>>x1>>y1>>x2>>y2;
-		if(x1==1)
-		{
-			auto it=lower_bound(all(a),(long double)y1/n);//watch((double)y1/n);
-			ub=*it;//watch(ub);
-			lb=ub-((long double)1/g);//watch(lb);
-		}
-		else
-		{
-			auto it=lower_bound(all(a),(long double)y1/m);//watch((double)y1/m);
-			ub=*it;//watch(ub);
-			lb=ub-(1/g);//watch(lb);
-		}
-		if(x2==1)
-		{
-			tmp=(long double)y2/n;
-		}
-		else
-		{
-			tmp=(long double)y2/m;
-		}//watch(tmp);
-		
-		if(lb<tmp && tmp<=ub)
-		{
-			cout<<"YES"<<endl;
-		}
-		else
-		{
-			cout<<"NO"<<endl;
-		}
+		cin>>b[i];
 	}
+	
+    cout<<sol(0,-1)<<endl;
     
 	return 0;
 }

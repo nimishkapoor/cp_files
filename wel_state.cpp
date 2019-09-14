@@ -122,12 +122,11 @@ bool prime(int x)
 	}
  return true;
 }
-long double gcd(long double a, long double b) 
+int gcd(int a, int b) 
 { 
     if (b == 0) 
-        return a;
-    long long int x=a,y=b; 
-    return gcd(y, x % y);  
+        return a; 
+    return gcd(b, a % b);  
 } 
 int coprime(int a, int b) 
 { 
@@ -197,7 +196,6 @@ bool fermat_prime(ull x)
 	return 1;
 }
 //======================================================================
-vector<long double> a;
 int main()
 {
 	ios_base::sync_with_stdio(0); 
@@ -206,75 +204,59 @@ int main()
     //freopen("input.txt", "r", stdin);
 	//freopen("output.txt", "w", stdout);
 	
-	long double n,m,q;
-	cin>>n>>m>>q;
-	long double g=gcd(n,m);
-	//watch(g);
+	int n;
+	cin>>n;
 	
-	if(n==m)
+	ll a[n+1];
+	ll t[n+1];
+	
+	clr(t);
+	
+	for(int i=1;i<=n;i++)
 	{
-		long double x1,y1,x2,y2,s1,s2;
-		while(q--)
+		cin>>a[i];
+	}
+	
+	int q;
+	cin>>q;
+	
+	ll d[q+1];
+	clr(d);
+	
+	
+	
+	for(int i=1;i<=q;i++)
+	{
+		int x,y,z;
+		cin>>x;
+		if(x==1)
 		{
-			cin>>x1>>y1>>x2>>y2;
-			if(y1==y2)
-			{
-				cout<<"YES"<<endl;
-			}	
-			else
-			{
-				cout<<"NO"<<endl;
-			}
+			cin>>y>>z;
+			a[y]=z;
+			t[y]=i;
 		}
-		return 0;
+		else
+		{
+			cin>>y;
+			d[i]=y;
+		}
 	}
 	
-	for(long double i=1;i<=g;i++)
+	for(int i=q-1;i>=0;i--)
 	{
-		//watch((double)i/g);
-		a.pb((long double)i/g);
+		d[i]=max(d[i],d[i+1]);
 	}
 	
-	/*for(int i=0;i<g;i++)
+	for(int i=1;i<=n;i++)
+	{
+		a[i]=max(a[i],d[t[i]]);
+	}
+	
+	for(int i=1;i<=n;i++)
 	{
 		cout<<a[i]<<" ";
-	}cout<<endl;*/
-	
-	long double x1,y1,x2,y2,s1,s2;
-	while(q--)
-	{
-		long double tmp,lb,ub;
-		cin>>x1>>y1>>x2>>y2;
-		if(x1==1)
-		{
-			auto it=lower_bound(all(a),(long double)y1/n);//watch((double)y1/n);
-			ub=*it;//watch(ub);
-			lb=ub-((long double)1/g);//watch(lb);
-		}
-		else
-		{
-			auto it=lower_bound(all(a),(long double)y1/m);//watch((double)y1/m);
-			ub=*it;//watch(ub);
-			lb=ub-(1/g);//watch(lb);
-		}
-		if(x2==1)
-		{
-			tmp=(long double)y2/n;
-		}
-		else
-		{
-			tmp=(long double)y2/m;
-		}//watch(tmp);
-		
-		if(lb<tmp && tmp<=ub)
-		{
-			cout<<"YES"<<endl;
-		}
-		else
-		{
-			cout<<"NO"<<endl;
-		}
 	}
+    cout<<endl;
     
 	return 0;
 }

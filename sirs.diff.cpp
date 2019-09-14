@@ -122,12 +122,11 @@ bool prime(int x)
 	}
  return true;
 }
-long double gcd(long double a, long double b) 
+int gcd(int a, int b) 
 { 
     if (b == 0) 
-        return a;
-    long long int x=a,y=b; 
-    return gcd(y, x % y);  
+        return a; 
+    return gcd(b, a % b);  
 } 
 int coprime(int a, int b) 
 { 
@@ -197,7 +196,91 @@ bool fermat_prime(ull x)
 	return 1;
 }
 //======================================================================
-vector<long double> a;
+ll n;
+ll a[100005];
+ll cnt[30];
+ll p10[64];
+const ll mod=998244353;
+
+
+ll sz(ll x)
+{
+	ll c=0;
+	while(x>0)
+	{
+		x/=10;
+		c++;
+	}
+	return c;
+}
+
+
+ll funE(ll x,ll i)
+{
+	ll ret=0;
+	ll tmp=x;
+	ll p=1;
+	ll j=min(sz(x),i);
+	while(j>0 && tmp>0)
+	{
+		ret+=p*(tmp%10)*cnt[i];
+		tmp/=10;
+		p*=100;
+		p%=mod;
+		ret%=mod;
+		j--;
+	}
+	if(tmp>0)
+	{
+		p=pow(10,(i*2));
+		p%=mod;
+		while(tmp>0)
+		{
+			ret+=p*(tmp%10)*cnt[i];
+			tmp/=10;
+			p*=10;
+			p%=mod;
+			ret%=mod;
+		}
+	}
+	//watch(ret);
+	return ret;
+}
+
+ll funO(ll x,ll i)
+{
+	ll ret=0;
+	ll tmp=x;
+	ll p=10;
+	ll j=min(sz(x),i);
+	while(j>0 && tmp>0)
+	{
+		ret+=p*(tmp%10)*cnt[i];
+		tmp/=10;
+		p*=100;
+		p%=mod;
+		ret%=mod;
+		j--;
+	}
+	if(tmp>0)
+	{
+		p=pow(10,(i*2));
+		p%=mod;
+		while(tmp>0)
+		{
+			ret+=p*(tmp%10)*cnt[i];
+			tmp/=10;
+			p*=10;
+			p%=mod;
+			ret%=mod;
+		}
+	}
+	//watch(ret);
+	return ret;
+}
+
+
+
 int main()
 {
 	ios_base::sync_with_stdio(0); 
@@ -206,75 +289,38 @@ int main()
     //freopen("input.txt", "r", stdin);
 	//freopen("output.txt", "w", stdout);
 	
-	long double n,m,q;
-	cin>>n>>m>>q;
-	long double g=gcd(n,m);
-	//watch(g);
-	
-	if(n==m)
+	p10[0]=1;
+	for(int i=1;i<20;i++)
 	{
-		long double x1,y1,x2,y2,s1,s2;
-		while(q--)
+		p10[i]=p10[i-1]*10;
+	}
+	
+	clr(cnt);
+	
+	cin>>n;
+	
+	for(int i=0;i<n;i++)
+	{
+		cin>>a[i];
+		cnt[sz(a[i])]++;
+	}
+	
+	ll ans=0;
+	
+	for(int i=0;i<n;i++)
+	{
+		for(int j=0;j<20;j++)
 		{
-			cin>>x1>>y1>>x2>>y2;
-			if(y1==y2)
+			if(cnt[j]>0)
 			{
-				cout<<"YES"<<endl;
-			}	
-			else
-			{
-				cout<<"NO"<<endl;
+				ans+=funE(a[i],j)%mod;
+				ans+=funO(a[i],j)%mod;
+				ans%=mod;
 			}
 		}
-		return 0;
 	}
 	
-	for(long double i=1;i<=g;i++)
-	{
-		//watch((double)i/g);
-		a.pb((long double)i/g);
-	}
-	
-	/*for(int i=0;i<g;i++)
-	{
-		cout<<a[i]<<" ";
-	}cout<<endl;*/
-	
-	long double x1,y1,x2,y2,s1,s2;
-	while(q--)
-	{
-		long double tmp,lb,ub;
-		cin>>x1>>y1>>x2>>y2;
-		if(x1==1)
-		{
-			auto it=lower_bound(all(a),(long double)y1/n);//watch((double)y1/n);
-			ub=*it;//watch(ub);
-			lb=ub-((long double)1/g);//watch(lb);
-		}
-		else
-		{
-			auto it=lower_bound(all(a),(long double)y1/m);//watch((double)y1/m);
-			ub=*it;//watch(ub);
-			lb=ub-(1/g);//watch(lb);
-		}
-		if(x2==1)
-		{
-			tmp=(long double)y2/n;
-		}
-		else
-		{
-			tmp=(long double)y2/m;
-		}//watch(tmp);
-		
-		if(lb<tmp && tmp<=ub)
-		{
-			cout<<"YES"<<endl;
-		}
-		else
-		{
-			cout<<"NO"<<endl;
-		}
-	}
+	cout<<ans<<endl;
     
 	return 0;
 }
