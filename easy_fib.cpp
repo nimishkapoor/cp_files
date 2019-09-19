@@ -204,51 +204,34 @@ int main()
     //freopen("input.txt", "r", stdin);
 	//freopen("output.txt", "w", stdout);
 	
-	for(int n=1;n<7;n++)
-	for(int k=1;k<=n;k++)
+	ll dp[61];
+    
+    dp[0]=0;
+    dp[1]=1;
+    for(int i =2;i<60;i++)
+    {
+		dp[i]=dp[i-1]+dp[i-2];
+	}
+	
+	for(int i=0;i<60;i++)
 	{
-		watch(n);
-		watch(k);
+		dp[i]=dp[i]%10;
+	}
+	
+	
+	int t;
+	cin>>t;
+	while(t--)
+	{
+		ull a;
+		cin>>a;
 		
+		ull x=(ull)log2(a);
+		x=1<<x;
 		
-		int a[n+1];
+		x%=60;
 		
-		a[0]=0;
-		a[1]=1;
-		a[2]=1;
-		
-		for(int i=3;i<=n;i++)
-		{
-			if(a[i-1]==0)
-			{
-				a[i]=1;
-			}
-			else if(a[i-2]==0)
-			{
-				a[i]=1;
-			}
-			else if(i>=k && a[i-k]==0)
-			{
-				a[i]=1;
-			}
-			else
-			{
-				a[i]=0;
-			}
-		}
-		
-		for(int i=0;i<=n;i++)
-		{
-			//cout<<i<<" ";
-		}//cout<<endl;cout<<endl;
-		for(int i=0;i<=n;i++)
-		{
-			cout<<a[i]<<" ";
-		}
-		cout<<endl;
-		
-		//cout<<"*******************"<<endl;
-		
+		cout<<(x==0?0:dp[x-1])<<endl;
 	}
     
 	return 0;

@@ -204,12 +204,16 @@ int main()
     //freopen("input.txt", "r", stdin);
 	//freopen("output.txt", "w", stdout);
 	
-	for(int n=1;n<7;n++)
-	for(int k=1;k<=n;k++)
+	int t;
+	cin>>t;
+	
+	while(t--)
 	{
-		watch(n);
-		watch(k);
+		//watch(k);
 		
+		int n,k;
+		
+		cin>>n>>k;
 		
 		int a[n+1];
 		
@@ -237,17 +241,14 @@ int main()
 			}
 		}
 		
-		for(int i=0;i<=n;i++)
+		if(a[n]==0)
 		{
-			//cout<<i<<" ";
-		}//cout<<endl;cout<<endl;
-		for(int i=0;i<=n;i++)
-		{
-			cout<<a[i]<<" ";
+			cout<<"Bob"<<endl;
 		}
-		cout<<endl;
-		
-		//cout<<"*******************"<<endl;
+		else
+		{
+			cout<<"Alice"<<endl;
+		}
 		
 	}
     

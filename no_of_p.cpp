@@ -204,52 +204,65 @@ int main()
     //freopen("input.txt", "r", stdin);
 	//freopen("output.txt", "w", stdout);
 	
-	for(int n=1;n<7;n++)
-	for(int k=1;k<=n;k++)
+	int n;
+	cin>>n;
+	
+	ll x;
+	
+	int a[n+1];
+	
+	for(int i=1;i<=n;i++)
 	{
-		watch(n);
-		watch(k);
-		
-		
-		int a[n+1];
-		
-		a[0]=0;
-		a[1]=1;
-		a[2]=1;
-		
-		for(int i=3;i<=n;i++)
+		cin>>x;
+		if(x>0)
 		{
-			if(a[i-1]==0)
+			a[i]=1;
+		}
+		else
+		{
+			a[i]=-1;
+		}
+	}
+	
+	int pos=0;
+	int neg=0;
+	int prev=a[1];
+	if(prev>0)
+	{
+		pos++;
+	}
+	else
+	{
+		neg++;
+	}
+	for(int i=1;i<n;i++)
+	{
+		if(a[i]>0)
+		{
+			if(prev>0)
 			{
-				a[i]=1;
-			}
-			else if(a[i-2]==0)
-			{
-				a[i]=1;
-			}
-			else if(i>=k && a[i-k]==0)
-			{
-				a[i]=1;
+				pos+=i;
 			}
 			else
 			{
-				a[i]=0;
+				neg+=i;
 			}
 		}
-		
-		for(int i=0;i<=n;i++)
+		else
 		{
-			//cout<<i<<" ";
-		}//cout<<endl;cout<<endl;
-		for(int i=0;i<=n;i++)
-		{
-			cout<<a[i]<<" ";
+			prev=a[i]*prev;
+			if(prev>0)
+			{
+				pos+=i;
+			}
+			else
+			{
+				neg+=i;
+			}
 		}
-		cout<<endl;
-		
-		//cout<<"*******************"<<endl;
-		
 	}
+    
+    cout<<neg<<" "<<pos<<endl;
     
 	return 0;
 }

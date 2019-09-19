@@ -203,6 +203,75 @@ int main()
     
     //freopen("input.txt", "r", stdin);
 	//freopen("output.txt", "w", stdout);
+	
+	int q;
+	cin>>q;
+	
+	while(q--)
+	{
+		string p,s,t;
+		
+		cin>>s;
+		cin>>t;
+		cin>>p;
+		
+		
+		int cnt[27];
+		clr(cnt);
+		
+		for(int i=0;i<p.size();i++)
+		{
+			cnt[p[i]-'a']++;
+		}
+		
+		if(s.size()>t.size())
+		{
+			cout<<"NO"<<endl;
+			continue;
+		}
+		
+		if(s.size()==t.size())
+		{
+			if(s==t)
+			{
+				cout<<"YES"<<endl;
+			}
+			else
+			{
+				cout<<"NO"<<endl;
+			}
+			continue;
+		}
+		
+		int j=0;
+		for(int i=0;i<t.size();i++)
+		{
+			if(s[j]==t[i])
+			{
+				j++;
+				continue;
+			}
+			if(cnt[t[i]-'a']>0)
+			{
+				s.insert(j,t,i,1);
+				cnt[t[i]-'a']--;
+				j++;
+			}
+		}
+		
+		//watch(s);
+		
+		if(s==t)
+		{
+			cout<<"YES"<<endl;
+		}
+		else
+		{
+			cout<<"NO"<<endl;
+		}
+		
+		
+	}
     
 	return 0;
 }

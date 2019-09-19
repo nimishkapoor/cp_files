@@ -204,52 +204,47 @@ int main()
     //freopen("input.txt", "r", stdin);
 	//freopen("output.txt", "w", stdout);
 	
-	for(int n=1;n<7;n++)
-	for(int k=1;k<=n;k++)
+	int n,x;
+	cin>>n;
+	
+	vi a;
+	
+	int cnt=0;
+	for(int i=0;i<n;i++)
 	{
-		watch(n);
-		watch(k);
-		
-		
-		int a[n+1];
-		
-		a[0]=0;
-		a[1]=1;
-		a[2]=1;
-		
-		for(int i=3;i<=n;i++)
-		{
-			if(a[i-1]==0)
-			{
-				a[i]=1;
-			}
-			else if(a[i-2]==0)
-			{
-				a[i]=1;
-			}
-			else if(i>=k && a[i-k]==0)
-			{
-				a[i]=1;
-			}
-			else
-			{
-				a[i]=0;
-			}
-		}
-		
-		for(int i=0;i<=n;i++)
-		{
-			//cout<<i<<" ";
-		}//cout<<endl;cout<<endl;
-		for(int i=0;i<=n;i++)
-		{
-			cout<<a[i]<<" ";
-		}
-		cout<<endl;
-		
-		//cout<<"*******************"<<endl;
-		
+		cin>>x;
+		a.pb(x);
 	}
+	
+	sort(all(a));
+	
+	int mark[n];
+	
+	clr(mark);
+	
+	for(int i=0;i<n;i++)
+	{
+		if(mark[i]==0)
+		{
+			for(int j=i+1;j<n;j++)
+			{
+				if(a[j]%a[i]==0)
+				{
+					mark[j]=1;
+				}
+			}
+		}
+	}
+	
+	for(int i=0;i<n;i++)
+	{
+		if(mark[i]==0)
+		{
+			cnt++;
+		}
+	}
+	
+	cout<<cnt<<endl;
     
 	return 0;
 }

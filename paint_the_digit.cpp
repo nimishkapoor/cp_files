@@ -204,50 +204,55 @@ int main()
     //freopen("input.txt", "r", stdin);
 	//freopen("output.txt", "w", stdout);
 	
-	for(int n=1;n<7;n++)
-	for(int k=1;k<=n;k++)
+	int t;
+	cin>>t;
+	
+	while(t--)
 	{
-		watch(n);
-		watch(k);
+		int n;
+		char x;
+		cin>>n;
 		
+		vi a;
 		
-		int a[n+1];
-		
-		a[0]=0;
-		a[1]=1;
-		a[2]=1;
-		
-		for(int i=3;i<=n;i++)
+		for(int i=0;i<n;i++)
 		{
-			if(a[i-1]==0)
+			cin>>x;
+			a.pb(x-'0');
+		}
+		
+		int k=1;
+		
+		bool f=0;
+		
+		for(int i=1;i<n;i++)
+		{
+			if(a[i]<a[i-1])
 			{
-				a[i]=1;
-			}
-			else if(a[i-2]==0)
-			{
-				a[i]=1;
-			}
-			else if(i>=k && a[i-k]==0)
-			{
-				a[i]=1;
+				k++;//watch(k);
+				if(k>2)
+				{
+					f=1;
+					break;
+				}
 			}
 			else
 			{
-				a[i]=0;
+				k=0;
 			}
 		}
 		
-		for(int i=0;i<=n;i++)
+		if(f==1)
 		{
-			//cout<<i<<" ";
-		}//cout<<endl;cout<<endl;
-		for(int i=0;i<=n;i++)
+			cout<<"-"<<endl;
+			continue;
+		}
+		
+		for(int i=0;i<n;i++)
 		{
-			cout<<a[i]<<" ";
+			cout<<"1";
 		}
 		cout<<endl;
-		
-		//cout<<"*******************"<<endl;
 		
 	}
     

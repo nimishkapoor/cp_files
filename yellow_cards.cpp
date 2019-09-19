@@ -196,6 +196,7 @@ bool fermat_prime(ull x)
 	return 1;
 }
 //======================================================================
+int a1,a2,k1,k2,n;
 int main()
 {
 	ios_base::sync_with_stdio(0); 
@@ -204,52 +205,114 @@ int main()
     //freopen("input.txt", "r", stdin);
 	//freopen("output.txt", "w", stdout);
 	
-	for(int n=1;n<7;n++)
-	for(int k=1;k<=n;k++)
+	cin>>a1>>a2>>k1>>k2>>n;
+
+	int mx=0;
+	int x=n;
+	if(k1<k2)
 	{
-		watch(n);
-		watch(k);
-		
-		
-		int a[n+1];
-		
-		a[0]=0;
-		a[1]=1;
-		a[2]=1;
-		
-		for(int i=3;i<=n;i++)
+		int tmp=a1;
+		while(tmp>0 && x>=k1)
 		{
-			if(a[i-1]==0)
+			x-=k1;
+			mx++;
+			tmp--;
+		}
+		if(x>=k2)
+		{
+			tmp=a2;
+			while(x>=k2 && tmp>0)
 			{
-				a[i]=1;
-			}
-			else if(a[i-2]==0)
-			{
-				a[i]=1;
-			}
-			else if(i>=k && a[i-k]==0)
-			{
-				a[i]=1;
-			}
-			else
-			{
-				a[i]=0;
+				x-=k2;
+				mx++;
+				tmp--;
 			}
 		}
-		
-		for(int i=0;i<=n;i++)
-		{
-			//cout<<i<<" ";
-		}//cout<<endl;cout<<endl;
-		for(int i=0;i<=n;i++)
-		{
-			cout<<a[i]<<" ";
-		}
-		cout<<endl;
-		
-		//cout<<"*******************"<<endl;
-		
 	}
-    
+	else
+	{
+		int tmp=a2;
+		while(tmp>0 && x>=k2)
+		{
+			x-=k2;
+			mx++;
+			tmp--;
+		}
+		if(x>=k1)
+		{
+			tmp=a1;
+			while(x>=k1 && tmp>0)
+			{
+				x-=k1;
+				mx++;
+				tmp--;
+			}
+		}
+	}
+	
+	int mn=0;
+	x=n;
+	if(k1>k2)
+	{
+		int tmp1=a1,tmp2=a2;
+		while(x>=(k1-1) && tmp1>0)
+		{
+			tmp1--;
+			x-=(k1-1);
+		}
+		if(tmp1>0)
+		{
+			x=0;
+		}
+		if(x>=(k2-1))
+		{
+			while(x>=(k2-1) && tmp2>0)
+			{
+				tmp2--;
+				x-=(k2-1);
+			}
+			if(tmp2>0)
+			{
+				x=0;
+			}
+		}
+		if(x>0)
+		{
+			mn=x;
+		}
+	}
+	else
+	{
+		
+		int tmp1=a2,tmp2=a1;
+		while(x>=(k2-1) && tmp1>0)
+		{
+			tmp1--;
+			x-=(k2-1);
+		}
+		if(tmp1>0)
+		{
+			x=0;
+		}
+		if(x>=(k1-1))
+		{
+			while(x>=(k1-1) && tmp2>0)
+			{
+				tmp2--;
+				x-=(k1-1);
+			}
+			if(tmp2>0)
+			{
+				x=0;
+			}
+		}
+		if(x>0)
+		{
+			mn=x;
+		}
+	}
+		
+	cout<<mn<<" "<<mx<<endl;
+	
 	return 0;
 }

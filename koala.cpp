@@ -204,52 +204,89 @@ int main()
     //freopen("input.txt", "r", stdin);
 	//freopen("output.txt", "w", stdout);
 	
-	for(int n=1;n<7;n++)
-	for(int k=1;k<=n;k++)
+	int n;
+	char c;
+	
+	int a[101][10001];
+	
+	for(int i=0;i<101;i++)
 	{
-		watch(n);
-		watch(k);
-		
-		
-		int a[n+1];
-		
-		a[0]=0;
-		a[1]=1;
-		a[2]=1;
-		
-		for(int i=3;i<=n;i++)
+		for(int j=0;j<10001;j++)
 		{
-			if(a[i-1]==0)
+			a[i][j]=0;
+		}
+	}
+	
+	cin>>n;
+	
+	for(int i=0;i<n;i++)
+	{
+		cin>>c;
+		a[i][0]=c-'0';
+	}
+	
+	vii op;
+	int x,y;
+	for(int i=0;i<n;i++)
+	{
+		cin>>x>>y;
+		op.pb(mp(x,y));
+	}
+	
+	for(int i=0;i<n;i++)
+	{
+		int of=!a[i][0];
+		int k=0;
+		int f=0;
+		for(int j=1;j<10001;j++)
+		{
+			if(j<op[i].sc)
 			{
-				a[i]=1;
-			}
-			else if(a[i-2]==0)
-			{
-				a[i]=1;
-			}
-			else if(i>=k && a[i-k]==0)
-			{
-				a[i]=1;
+				a[i][j]=a[i][0];
 			}
 			else
 			{
-				a[i]=0;
+				if(k>=op[i].fr && f==1)
+				{
+					k=0;
+					of=!of;
+				}
+				f=1;
+				a[i][j]=of;
+				k++;
 			}
 		}
-		
-		for(int i=0;i<=n;i++)
+	}
+	
+	int ans =0;
+	for(int j=0;j<10001;j++)
+	{
+		int tmp=0;
+		for(int i=0;i<n;i++)
 		{
-			//cout<<i<<" ";
-		}//cout<<endl;cout<<endl;
-		for(int i=0;i<=n;i++)
+			if(a[i][j]==1)
+			{
+				tmp++;
+			}
+		}
+		ans=max(ans,tmp);
+	}
+	
+	/*for(int i=0;i<7;i++)
+	{
+		cout<<i<<" ";
+	}
+	cout<<endl;
+	for(int i=0;i<n;i++)
+	{
+		for(int j=0;j<7;j++)
 		{
-			cout<<a[i]<<" ";
+			cout<<a[i][j]<<" ";
 		}
 		cout<<endl;
-		
-		//cout<<"*******************"<<endl;
-		
-	}
+	}*/
+	
+	cout<<ans<<endl;
     
 	return 0;
 }
