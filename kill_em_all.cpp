@@ -208,29 +208,24 @@ int main()
 	
 	int t;
 	cin>>t;
-	
 	while(t--)
 	{
-		set<int> s;
-		int n,r,x;
+		int n,r;
 		cin>>n>>r;
+		
+		int a[n];
 		for(int i=0;i<n;i++)
 		{
-			cin>>x;
-			s.insert(x);
+			cin>>a[i];
 		}
-		int cnt=0;
-		int tmp=r;
-		for(auto it=s.rbegin();it!=s.rend();it++)
+		sort(a,a+n);
+		n=unique(a,a+n)-a;
+		int ans=0;
+		for(int i=n-1;i>=0;i--)
 		{
-			cnt++;
-			if(*it-tmp<=0)
-			{
-				break;
-			}
-			tmp+=r;
+			ans+=((a[i] - (ans*r)) > 0);
 		}
-		cout<<cnt<<endl;
+		cout<<ans<<endl;
 	}
     
 	return 0;

@@ -34,7 +34,7 @@ const double infd = 1.0/0.0;
 #define alla(a,n) a, a+n
 //#define endl "\n"
 
-long long power(long long x, long long y,long long MOD)
+/*long long power(long long x, long long y,long long MOD)
 {
 	long long res = 1; 
 	x = x % MOD; 
@@ -62,7 +62,7 @@ long long mul(long long a,long long b,long long MOD)
 	{
 		return (a+(2*(mul(a,b/2,MOD))%MOD))%MOD;
 	}
-}
+}*/
 
 /*ll ncr[6001][6001];
 void nCr(long long MOD)
@@ -148,7 +148,7 @@ unsigned long long lcm (unsigned a, unsigned b)
 {
     return ((unsigned long long) a) * (b / gcd(a, b));
 }
-/*ll mulmod(ll a,ll b,ll c){
+ll mulmod(ll a,ll b,ll c){
     ll x = 0,y=a%c;
     while(b > 0){
         if(b%2 == 1){
@@ -163,13 +163,13 @@ ll power(ll a,ll b,ll n){
 	if(b==0)
 		return 1;
 	if(b==1) return a%n;
-		ll c=power(a,b/2,n)%n;
+		ll c=power(a,b/2,n);
 		ll p=mulmod(c%n,c%n,n);
 		if(b%2==0)
 			return p;
 		else
 			 return (mulmod(p,a,n));
-}*/
+}
 bool fermat_prime(ull x)
 {
 	if(x==2 || x==3)
@@ -198,16 +198,6 @@ bool fermat_prime(ull x)
 //dont use inbuilt ceil
 //use (a+b-1)/b instead.
 //======================================================================
-const int md=1e9+7;
-ll fun(ll a,ll b,ll n)
-{
-	if(b==0)
-	{
-		return 1ll;
-	}
-	return a*fun(a-1,b-1,n)%n;
-}
-
 int main()
 {
 	ios_base::sync_with_stdio(0); 
@@ -215,11 +205,39 @@ int main()
     
     //freopen("input.txt", "r", stdin);
 	//freopen("output.txt", "w", stdout);
-	
-	ll n,m;
-	cin>>n>>m;
-	
-	cout<<((((power((power(2,m,md)%md)-1,(n%md),md)%md))%md))<<endl;
+    
+    int t;
+    cin>>t;
+    while(t--)
+    {
+		ll n,h;
+		cin>>h>>n;
+		ll a[n];
+		for(int i=0;i<n;i++)
+		{
+			cin>>a[i];
+		}
+		int ans=0;
+		for(int i=0;i<n;i++)
+		{
+			int st=a[i];
+			ll len=1;
+			while((a[i]==a[i+1]+1) && (i+1)<h)
+			{
+				len++;
+				i++;
+			}
+			if(st==h && len%2==0 && a[i]!=1)
+			{
+				ans++;
+			}
+			if(st!=h && len%2==1 && a[i]!=1)
+			{
+				ans++;
+			}
+		}
+		cout<<ans<<endl;
+	}
     
 	return 0;
 }
