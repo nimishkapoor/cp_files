@@ -22,7 +22,7 @@ typedef vector<iii> viii;
 typedef vector<long long int> vl;
 
 const double pi = 2 * acos(0.0);
-const ll inf = 9e18;
+const int inf = 0x3f3f3f3f;//(ll) 9e18
 const double infd = 1.0/0.0;
 
 #define pb push_back
@@ -206,78 +206,33 @@ int main()
     //freopen("input.txt", "r", stdin);
 	//freopen("output.txt", "w", stdout);
 	
-	ll q;
-	cin>>q;
+	int n;
+	cin>>n;
 	
-	while(q--)
+	vector<ll> a(n);
+	
+	for(int i=0;i<n;i++)
 	{
-		int a=0;
-		ll n;
-		cin>>n;
-		ll tmp=n;
-		ll x=1;
-		int i=1;
-		set<int> s;
-		while(1)
-		{
-			x*=3;
-			if(tmp%x==0 && s.count(tmp/x)==0)
-			{
-				s.insert(x);
-				tmp-=x;
-				a+=1<<i;
-			}
-			i++;
-			if(x>tmp)
-			{
-				break;
-			}
-		}
-		
-		watch(tmp);
-		
-		tmp=n-tmp;
-		int ls;
-		/*for(int i=0;i<64;i++)
-		{
-			if(a[i]==1)
-			{
-				ls=i;
-			}
-		}
-		
-		
-		for(int i=0;i<=ls;i++)
-		{
-			cout<<a[i]<<" ";
-		}
-		cout<<endl;
-		
-		vi v;
-		for(int i=0;i<=ls;i++)
-		{
-			if(a[i]==0)
-			{
-				v.pb(i);
-			}
-		}
-		v.pb(ls+1);
-		
-		ll ans=inf;
-		for(int i=0;i<=v.size();i++)
-		{
-			int tmp1=0;
-			for(int j=0;j<=v.size();j++)
-			{
-				if(i & (1<<j))
-				{
-					tmp1+=power(3,v[j]);
-				}
-			}
-			ans=min(ans,tmp1+tmp);
-		}
-		cout<<ans<<endl;*/
+		cin>>a[i];
 	}
+    
+    sort(all(a));
+    
+    ll m=(n+2-1)/2;
+    //watch(m);
+    
+    ll x=0,y=0;
+    
+    for(int i=n-1;i>=(n-m);i--)
+    {
+		x+=a[i];
+	}
+	for(int i=0;i<(n-m);i++)
+	{
+		y+=a[i];
+	}
+	
+	cout<<power(x,2)+power(y,2)<<endl;
     
 	return 0;
 }

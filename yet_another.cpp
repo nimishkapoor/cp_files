@@ -22,7 +22,7 @@ typedef vector<iii> viii;
 typedef vector<long long int> vl;
 
 const double pi = 2 * acos(0.0);
-const ll inf = 9e18;
+const int inf = 0x3f3f3f3f;//(ll) 9e18
 const double infd = 1.0/0.0;
 
 #define pb push_back
@@ -148,29 +148,29 @@ unsigned long long lcm (unsigned a, unsigned b)
 {
     return ((unsigned long long) a) * (b / gcd(a, b));
 }
-ll mulmod(ll a,ll b){
-    ll x = 0,y=a;
+ll mulmod(ll a,ll b,ll c){
+    ll x = 0,y=a%c;
     while(b > 0){
         if(b%2 == 1){
-            x = (x+y);
+            x = (x+y)%c;
         }
-        y = (y*2);
+        y = (y*2)%c;
         b /= 2;
     }
-    return x;
+    return x%c;
 }
-ll power(ll a,ll b){
+ll power(ll a,ll b,ll n){
 	if(b==0)
 		return 1;
-	if(b==1) return a;
-		ll c=power(a,b/2);
-		ll p=mulmod(c,c);
+	if(b==1) return a%n;
+		ll c=power(a,b/2,n);
+		ll p=mulmod(c%n,c%n,n);
 		if(b%2==0)
 			return p;
 		else
-			 return (mulmod(p,a));
+			 return (mulmod(p,a,n));
 }
-/*bool fermat_prime(ull x)
+bool fermat_prime(ull x)
 {
 	if(x==2 || x==3)
 	{
@@ -194,7 +194,7 @@ ll power(ll a,ll b){
 		}
 	}
 	return 1;
-}*/
+}
 //dont use inbuilt ceil
 //use (a+b-1)/b instead.
 //======================================================================
@@ -206,77 +206,36 @@ int main()
     //freopen("input.txt", "r", stdin);
 	//freopen("output.txt", "w", stdout);
 	
-	ll q;
+	int q;
 	cin>>q;
 	
 	while(q--)
 	{
-		int a=0;
-		ll n;
+		int n;
 		cin>>n;
-		ll tmp=n;
-		ll x=1;
-		int i=1;
-		set<int> s;
-		while(1)
+		int a[n];
+		for(int i=0;i<n;i++)
 		{
-			x*=3;
-			if(tmp%x==0 && s.count(tmp/x)==0)
+			cin>>a[i];
+		}
+		sort(a,a+n);
+		bool f=0;
+		for(int i=1;i<n;i++)
+		{
+			if(abs(a[i]-a[i-1])<2)
 			{
-				s.insert(x);
-				tmp-=x;
-				a+=1<<i;
-			}
-			i++;
-			if(x>tmp)
-			{
+				f=1;
 				break;
 			}
 		}
-		
-		watch(tmp);
-		
-		tmp=n-tmp;
-		int ls;
-		/*for(int i=0;i<64;i++)
+		if(f==0)
 		{
-			if(a[i]==1)
-			{
-				ls=i;
-			}
+			cout<<1<<endl;
 		}
-		
-		
-		for(int i=0;i<=ls;i++)
+		else
 		{
-			cout<<a[i]<<" ";
+			cout<<2<<endl;
 		}
-		cout<<endl;
-		
-		vi v;
-		for(int i=0;i<=ls;i++)
-		{
-			if(a[i]==0)
-			{
-				v.pb(i);
-			}
-		}
-		v.pb(ls+1);
-		
-		ll ans=inf;
-		for(int i=0;i<=v.size();i++)
-		{
-			int tmp1=0;
-			for(int j=0;j<=v.size();j++)
-			{
-				if(i & (1<<j))
-				{
-					tmp1+=power(3,v[j]);
-				}
-			}
-			ans=min(ans,tmp1+tmp);
-		}
-		cout<<ans<<endl;*/
 	}
     
 	return 0;

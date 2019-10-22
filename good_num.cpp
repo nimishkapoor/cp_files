@@ -22,7 +22,7 @@ typedef vector<iii> viii;
 typedef vector<long long int> vl;
 
 const double pi = 2 * acos(0.0);
-const ll inf = 9e18;
+const int inf = 0x3f3f3f3f;//(ll) 9e18
 const double infd = 1.0/0.0;
 
 #define pb push_back
@@ -170,31 +170,7 @@ ll power(ll a,ll b){
 		else
 			 return (mulmod(p,a));
 }
-/*bool fermat_prime(ull x)
-{
-	if(x==2 || x==3)
-	{
-		return 1;
-	}
-	if(x<=3 || x==4)
-	{
-		return 0;
-	}
-	
-	for(int i=1;i<=2;i++)
-	{
-		ull a=2+rand()%(x-4);
-		if(gcd(x,a)!=1)
-		{
-			return 0;
-		}
-		if(power(a,x-1,x)!=1)
-		{
-			return 0;
-		}
-	}
-	return 1;
-}*/
+
 //dont use inbuilt ceil
 //use (a+b-1)/b instead.
 //======================================================================
@@ -206,77 +182,37 @@ int main()
     //freopen("input.txt", "r", stdin);
 	//freopen("output.txt", "w", stdout);
 	
-	ll q;
+	vector<ll> v;
+	
+	for(ll i=1;i<=1000000;i++)
+	{
+		ll tmp=0;
+		for(ll j=0;j<63;j++)
+		{
+			if((i & (1ull<<j)))
+			{
+				tmp+=power(3,j);
+			}
+		}
+		v.pb(tmp);
+	}
+	
+	sort(all(v));
+	/*for(int i=0;i<10;i++)
+	{
+		cout<<v[i]<<" ";
+	}cout<<endl;*/
+	watch(v.size());
+	
+	int q;
 	cin>>q;
 	
 	while(q--)
 	{
-		int a=0;
-		ll n;
+		ull n;
 		cin>>n;
-		ll tmp=n;
-		ll x=1;
-		int i=1;
-		set<int> s;
-		while(1)
-		{
-			x*=3;
-			if(tmp%x==0 && s.count(tmp/x)==0)
-			{
-				s.insert(x);
-				tmp-=x;
-				a+=1<<i;
-			}
-			i++;
-			if(x>tmp)
-			{
-				break;
-			}
-		}
-		
-		watch(tmp);
-		
-		tmp=n-tmp;
-		int ls;
-		/*for(int i=0;i<64;i++)
-		{
-			if(a[i]==1)
-			{
-				ls=i;
-			}
-		}
-		
-		
-		for(int i=0;i<=ls;i++)
-		{
-			cout<<a[i]<<" ";
-		}
-		cout<<endl;
-		
-		vi v;
-		for(int i=0;i<=ls;i++)
-		{
-			if(a[i]==0)
-			{
-				v.pb(i);
-			}
-		}
-		v.pb(ls+1);
-		
-		ll ans=inf;
-		for(int i=0;i<=v.size();i++)
-		{
-			int tmp1=0;
-			for(int j=0;j<=v.size();j++)
-			{
-				if(i & (1<<j))
-				{
-					tmp1+=power(3,v[j]);
-				}
-			}
-			ans=min(ans,tmp1+tmp);
-		}
-		cout<<ans<<endl;*/
+		auto it=lower_bound(all(v),n);
+		cout<<(*it)<<endl;
 	}
     
 	return 0;
