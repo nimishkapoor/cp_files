@@ -1,30 +1,28 @@
 #include<bits/stdc++.h>
 using namespace std;
+#define watch(x) cout << (#x) << " is " << (x) << endl
 const int maxn=1e5+10;
 int cnt[maxn],a[maxn][4],ans[maxn];
 set<int> s[maxn];
 int main()
 {
-    int n;
-    cin>>n;
-    for(int i=1;i<=n-2;i++)
-    {
-        for(int j=1;j<=3;j++)
-        {
-            cin>>a[i][j];
-            cnt[a[i][j]]++;
-            s[a[i][j]].insert(i);
-        }
-    }
-    /*for(int i=1;i<=n;i++)
-    {
-        if(cnt[i]==1)
-        {
-            if(ans[1]==0)ans[1]=i;
-            else ans[n]=i,cnt[i]=0;
-        }
-    }*/
-    for(int i=1;i<=n;i++)
+	int n,x,y,z;
+	cin>>n;
+	
+	
+	for(int i=1;i<=n-2;i++)
+	{
+		for(int j=1;j<=3;j++)
+		{
+			cin>>a[i][j];
+			cnt[a[i][j]]++;
+			s[a[i][j]].insert(i);
+		}
+	}
+	
+	
+	
+	for(int i=1;i<=n;i++)
 	{
 		if(cnt[i]==1)
 		{
@@ -38,10 +36,11 @@ int main()
 			}
 		}
 	}
-    int tmp=ans[1],x1=0,x2=0;
-    cnt[tmp]--;
-    int it=*s[tmp].begin();
-    s[tmp].erase(it);
+	
+	int x1=0,x2=0;
+	int tmp=ans[1];
+	int it=*s[tmp].begin();
+	s[tmp].erase(it);
 	for(int i=1;i<=3;i++)
 	{
 		if(a[it][i]!=tmp)
@@ -95,4 +94,3 @@ int main()
 	
 	return 0;
 }
-
